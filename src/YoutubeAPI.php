@@ -13,6 +13,7 @@ use Exception;
 use Carbon\Carbon;
 use Google_Client;
 use Google_Exception;
+use Google_Service_Drive;
 use Google_Service_Exception;
 use Google_Service_YouTube;
 use Google_Service_YouTubeReporting;
@@ -31,6 +32,12 @@ class YoutubeAPI
      * @var \Google_Client
      */
     protected $client;
+    /**
+     * Google Drive Service
+     * 
+     * @var \Google_Service_Drive
+     */
+    protected $drive;
     /**
      * Google YouTube Service
      *
@@ -65,10 +72,59 @@ class YoutubeAPI
         $this->app = $app;
         $this->client = $this->setup($client);
         $this->youtube = new \Google_Service_YouTube($this->client);
+        $this->drive = new \Google_Service_Drive($this->client);
         if ($accessToken = $this->getLatestAccessTokenFromDB()) {
             $this->client->setAccessToken($accessToken);
         }
     }
+    /**
+     * Upload file to Google Drive
+     * 
+     * @param string $path
+     * @param array $data
+     */
+    public function uploadDrive($path, $data)
+    {
+        if(!file_exists($path)) {
+            throw new Exception('File does not exist at path: "'. $path .'". Provide a full path to the file before attempting to upload.');
+        }
+        $this->handleAccessToken();
+        try{
+            $fileMetadata = new \Google_Service_Drive_DriveFile(array('name' => $data['name']));
+            $content = file_get_contents($path);
+            $file = $this->drive->files->create($fileMetadata, array(
+                'data' => $content,
+                'mimeType' => $data['mimeType'],
+                'uploadType' => 'multipart',
+                'fields' => 'id'
+            ));
+
+            $userPermission = new \Google_Service_Drive_Permission(array('type' => 'anyone', 'role' => 'reader'));
+            $this->drive->permissions->create($file->id, $userPermission, array('fields' => 'id'));
+        }  catch (\Google_Service_Exception $e) {
+            throw new Exception($e->getMessage());
+        } catch (\Google_Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        return $file;
+    }
+
+    /**
+     * Delete file from Google Drive
+     * 
+     * @param string $fileId
+     */
+    function deleteDrive($fileId) 
+    {
+        $this->handleAccessToken();
+        try {
+            return $this->drive->files->delete($fileId);
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+        return false;
+    }
+
     /**
      * Upload the video to YouTube
      *
