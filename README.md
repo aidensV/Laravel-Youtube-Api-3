@@ -6,10 +6,65 @@
 
 To install, use the following to pull the package in via Composer.
 
+Add this to your composer.json
+
 ```
-composer require ad/youtube:dev-master
+"repositories": {
+	"laravel-youtube-api-3": {
+		"type": "package",
+		"package": {
+			"name": "ad/youtube",
+			"version": "1.4",
+			"source": {
+				"url": "https://github.com/jhemmmm/Laravel-Youtube-Api-3.git",
+				"type": "git",
+				"reference": "origin/master"
+			},
+			"autoload": {
+				"psr-4": {
+					"ad\\Youtube\\": "src/"
+				}
+			},
+			"autoload-dev": {
+				"psr-4": {
+					"ad\\Youtube\\Tests\\": "tests/"
+				}
+			},
+			"minimum-stability": "stable",
+			"extra": {
+				"laravel": {
+					"providers": [
+						"ad\\Youtube\\YoutubeAPIServiceProvider"
+					],
+					"aliases": {
+						"Youtube": "ad\\Youtube\\Facades\\YoutubeAPI"
+					}
+				}
+			}
+		}
+	}
+},
 ```
 
+And also add this to your "require" & "require-dev"
+```
+"require": {
+	"php": "^7.2",
+	"illuminate/support": "^6.13",
+	"nesbot/carbon": "^2.0",
+	"google/apiclient": "^2.2",
+},
+"require-dev": {
+	"orchestra/testbench": "^4.6",
+	"phpunit/phpcov": "^6.0",
+	"phpunit/phpunit": "~8.0"
+},
+```
+
+Update your composer by using this command.
+```
+composer update
+```
 
 Now register the Service provider in `config/app.php`
 
@@ -171,3 +226,18 @@ YoutubeAPI::updatePlaylist($id,$title,$description);
 ```php
 YoutubeAPI::deletePlaylist($id);
 ```
+
+I have also added a google drive support.
+
+# Upload File to Google Drive (your file will be automatically shared to public
+
+```php
+YoutubeAPI::uploadDrive($path, $data = array('name' => 'foo', 'mimeType' => 'bar'));
+```
+
+# Delete file
+
+```php
+YoutubeAPI::deleteDrive($fileId);
+```
+
