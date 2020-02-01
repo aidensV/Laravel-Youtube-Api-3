@@ -14,7 +14,7 @@ Add this to your composer.json
 		"type": "package",
 		"package": {
 			"name": "ad/youtube",
-			"version": "1.4",
+			"version": "1.0",
 			"source": {
 				"url": "https://github.com/jhemmmm/Laravel-Youtube-Api-3.git",
 				"type": "git",
@@ -49,6 +49,7 @@ Add this to your composer.json
 And also add this to your "require" & "require-dev"
 ```
 "require": {
+	"ad/youtube": "1.0",
 	"php": "^7.2",
 	"illuminate/support": "^6.13",
 	"nesbot/carbon": "^2.0",
