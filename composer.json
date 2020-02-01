@@ -2,24 +2,31 @@
     "name": "ad/youtube",
     "description": "Youtube API3 Package for laravel",
     "license": "MIT",
-    "authors": [{
-        "name": "Ajit Das",
-        "email": "ajit@madgeek.in"
-    }],
+    "authors": [
+        {
+            "name": "Ajit Das",
+            "email": "ajit@madgeek.in"
+        }
+    ],
     "require": {
-        "php": "^7.0",
-        "illuminate/support": "^5.4",
+        "php": "^7.2",
+		"illuminate/support": "^6.13",
+        "nesbot/carbon": "^2.0",
         "google/apiclient": "^2.2",
-        "nesbot/carbon": "^1.22"
     },
     "require-dev": {
-        "orchestra/testbench": "~3.2",
-        "phpunit/phpunit": "~8.0",
-        "phpunit/phpcov": "~8.0"
+        "orchestra/testbench": "^4.6",
+        "phpunit/phpcov": "^6.0",
+        "phpunit/phpunit": "~8.0"
     },
     "autoload": {
         "psr-4": {
             "ad\\Youtube\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ad\\Youtube\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "stable",
