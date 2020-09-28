@@ -1,42 +1,43 @@
 {
-    "name": "ad/youtube",
-    "description": "Youtube API3 Package for laravel",
+    "name": "aidens/youtube",
+    "description": "Api Youtube 3 Package For Laravel",
+    "type": "library",
+    "require": {
+        "php": "^7.3",
+        "nesbot/carbon": "^2.40",
+        "illuminate/support": "^8.6",
+        "google/apiclient": "^2.7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.3",
+        "phpunit/phpcov": "^8.1"
+        
+    },
     "license": "MIT",
     "authors": [
         {
-            "name": "Ajit Das",
-            "email": "ajit@madgeek.in"
+            "name": "aidensV",
+            "email": "nameblacllis@gmail.com"
         }
     ],
-    "require": {
-        "php": "^7.2",
-		"illuminate/support": "^6.13",
-        "nesbot/carbon": "^2.0",
-        "google/apiclient": "^2.2",
-    },
-    "require-dev": {
-        "orchestra/testbench": "^4.6",
-        "phpunit/phpcov": "^6.0",
-        "phpunit/phpunit": "~8.0"
-    },
     "autoload": {
         "psr-4": {
-            "ad\\Youtube\\": "src/"
+            "aiden\\Youtube\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ad\\Youtube\\Tests\\": "tests/"
+            "aiden\\Youtube\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "stable",
     "extra": {
         "laravel": {
             "providers": [
-                "ad\\Youtube\\YoutubeAPIServiceProvider"
+                "aiden\\Youtube\\YoutubeAPIServiceProvider"
             ],
             "aliases": {
-                "Youtube": "ad\\Youtube\\Facades\\YoutubeAPI"
+                "Youtube": "aiden\\Youtube\\Facades\\YoutubeAPI"
             }
         }
     }
