@@ -6,7 +6,7 @@
  * Time: 10:22 PM
  */
 
-namespace ad\Youtube\Facades;
+namespace aiden\Youtube\Facades;
 use Illuminate\Support\Facades\Facade;
 
 class YoutubeAPI extends Facade

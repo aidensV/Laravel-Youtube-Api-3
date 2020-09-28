@@ -36,7 +36,7 @@
                 "aiden\\Youtube\\YoutubeAPIServiceProvider"
             ],
             "aliases": {
-                "Youtube": "aiden\\Youtube\\Facades\\YoutubeAPI"
+                "Youtube":"aiden\\Youtube\\Facades\\YoutubeAPI"
             }
         }
     }

@@ -6,7 +6,7 @@
  * Time: 10:30 PM
  */
 
-namespace ad\Youtube;
+namespace aiden\Youtube;
 
 use Illuminate\Support\ServiceProvider;
 class YoutubeAPIServiceProvider extends ServiceProvider

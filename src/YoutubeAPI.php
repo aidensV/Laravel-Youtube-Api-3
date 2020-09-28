@@ -7,7 +7,7 @@
  * Time: 10:27 PM
  */
 
-namespace ad\Youtube;
+namespace aiden\Youtube;
 
 use Exception;
 use Carbon\Carbon;
