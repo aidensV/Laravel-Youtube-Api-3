@@ -129,7 +129,7 @@ class YoutubeAPI {
 	 * @param  string $privacyStatus
 	 * @return string
 	 */
-	public function upload($path, array $data = [], $privacyStatus) {
+	public function upload($path, array $data = [], $privacyStatus = 'unlisted') {
 		if (!file_exists($path)) {
 			throw new Exception('Video file does not exist at path: "' . $path . '". Provide a full path to the file before attempting to upload.');
 		}
@@ -241,7 +241,7 @@ class YoutubeAPI {
 	 * Update a Youtube video by its ID
 	 * @param $id, $status
 	 */
-	public function updateVideo($id, array $data = [], $privacyStatus) {
+	public function updateVideo($id, array $data = [], $privacyStatus = 'unlisted') {
 		$this->handleAccessToken();
 		try {
 			// Setup the Snippet

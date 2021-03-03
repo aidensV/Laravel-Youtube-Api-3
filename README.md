@@ -1,4 +1,4 @@
-# Laravel 6 - YouTube Video Upload
+# Laravel 6|8 - YouTube Video Upload
 
 **Please note, that this package will only work with a single YouTube account and does not support multiple accounts.**
 
@@ -13,8 +13,8 @@ Add this to your composer.json
 	"laravel-youtube-api-3": {
 		"type": "package",
 		"package": {
-			"name": "ad/youtube",
-			"version": "1.0",
+			"name": "aiden/youtube",
+			"version": "1.1",
 			"source": {
 				"url": "https://github.com/jhemmmm/Laravel-Youtube-Api-3.git",
 				"type": "git",
@@ -49,7 +49,7 @@ Add this to your composer.json
 And also add this to your "require" & "require-dev"
 ```
 "require": {
-	"ad/youtube": "1.0",
+	"aiden/youtube": "1.0",
 	"php": "^7.2",
 	"illuminate/support": "^6.13",
 	"nesbot/carbon": "^2.0",
@@ -67,12 +67,16 @@ Update your composer by using this command.
 composer update
 ```
 
+Or simplify copy paste
+```
+composer require aidens/youtube
+```
 Now register the Service provider in `config/app.php`
 
 ```php
 'providers' => [
     ...
-    ad\Youtube\YoutubeAPIServiceProvider::class,
+    aiden\Youtube\YoutubeAPIServiceProvider::class,
 ],
 ```
 
@@ -81,7 +85,7 @@ And also add the alias to the same file.
 ```php
 'aliases' => [
     ...
-    'YoutubeAPI'=>ad\Youtube\Facades\YoutubeAPI::class,
+    'YoutubeAPI'=>aiden\Youtube\Facades\YoutubeAPI::class,
 ],
 ```
 
@@ -90,7 +94,7 @@ And also add the alias to the same file.
 You now need to publish the `youtubeAPI.php` config and migrations.
 
 ```
-php artisan vendor:publish --provider="ad\Youtube\YoutubeAPIServiceProvider"
+php artisan vendor:publish --provider="aiden\Youtube\YoutubeAPIServiceProvider"
 ```
 
 Now you'll want to run `php artisan migrate` to create the `youtube_access_tokens` table which as you would imagine, will contain your access tokens once you're authenticated correctly.
