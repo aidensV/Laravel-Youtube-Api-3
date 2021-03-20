@@ -89,13 +89,77 @@ class YoutubeAPI {
 		try {
 			$fileMetadata = new \Google_Service_Drive_DriveFile(array('name' => $data['name']));
 			$content = file_get_contents($path);
+			$uploadType = 'multipart';
+			if(isset($data['uploadType'])){
+				$uploadType = $data['uploadType'];
+			}
 			$file = $this->drive->files->create($fileMetadata, array(
 				'data' => $content,
 				'mimeType' => $data['mimeType'],
-				'uploadType' => 'multipart',
+				'uploadType' => $uploadType,
 				'fields' => 'id',
 			));
 
+			$userPermission = new \Google_Service_Drive_Permission(array('type' => 'anyone', 'role' => 'reader'));
+			$this->drive->permissions->create($file->id, $userPermission, array('fields' => 'id'));
+		} catch (\Google_Service_Exception $e) {
+			throw new Exception($e->getMessage());
+		} catch (\Google_Exception $e) {
+			throw new Exception($e->getMessage());
+		}
+		return $file;
+	}
+
+	/**
+	 * Upload file to Google Drive
+	 *
+	 * @param string $path
+	 * @param array $data
+	 */
+	public function uploadBigFileDrive($path, $data) {
+		if (!file_exists($path)) {
+			throw new Exception('File does not exist at path: "' . $path . '". Provide a full path to the file before attempting to upload.');
+		}
+		$this->handleAccessToken();
+		try {
+			$fileMetadata = new \Google_Service_Drive_DriveFile(array('name' => $data['name']));
+			$content = file_get_contents($path);
+			$uploadType = 'resumable';
+			if(isset($data['uploadType'])){
+				$uploadType = $data['uploadType'];
+			}
+
+			// Set the Chunk Size
+			$chunkSize = 1 * 1024 * 1024;
+			// Set the defer to true
+			$this->client->setDefer(true);
+
+			$file = $this->drive->files->create($fileMetadata, array(
+				'data' => $content,
+				'mimeType' => $data['mimeType'],
+				'uploadType' => $uploadType,
+				'fields' => 'id',
+			));
+
+			$media = new \Google_Http_MediaFileUpload(
+				$this->client,
+				$file,
+				'/*',
+				null,
+				true,
+				$chunkSize
+			);
+			$media->setFileSize(filesize($path));
+			// Read the file and upload in chunks
+			$status = false;
+			$handle = fopen($path, "rb");
+			while (!$status && !feof($handle)) {
+				$chunk = fread($handle, $chunkSize);
+				$status = $media->nextChunk($chunk);
+			}
+			fclose($handle);
+			$this->client->setDefer(false);
+			
 			$userPermission = new \Google_Service_Drive_Permission(array('type' => 'anyone', 'role' => 'reader'));
 			$this->drive->permissions->create($file->id, $userPermission, array('fields' => 'id'));
 		} catch (\Google_Service_Exception $e) {
