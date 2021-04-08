@@ -87,7 +87,19 @@ class YoutubeAPI {
 		}
 		$this->handleAccessToken();
 		try {
-			$fileMetadata = new \Google_Service_Drive_DriveFile(array('name' => $data['name']));
+			$drivePath = [
+				'name' => $data['name']
+			];
+			
+			$folderId = $this->app->config->get('youtubeAPIConfig.drive_folder_id');
+			if ($folderId) {
+				$drivePath = [
+					'name' => $data['name'],
+					'parents' => [$folderId]
+				];
+			}
+
+			$fileMetadata = new \Google_Service_Drive_DriveFile($drivePath);
 			$content = file_get_contents($path);
 			$uploadType = 'multipart';
 			if(isset($data['uploadType'])){
@@ -430,16 +442,14 @@ class YoutubeAPI {
 	 */
 	private function setup(Google_Client $client) {
 		if (
-			!$this->app->config->get('youtubeAPIConfig.client_id') ||
-			!$this->app->config->get('youtubeAPIConfig.client_secret')
+			!$this->app->config->get('youtubeAPIConfig.service_account_path')
 		) {
-			throw new Exception('A Google "client_id" and "client_secret" must be configured.');
+			throw new Exception('A Google "service_account_path" must be configured.');
 		}
-		$client->setClientId($this->app->config->get('youtubeAPIConfig.client_id'));
-		$client->setClientSecret($this->app->config->get('youtubeAPIConfig.client_secret'));
+		$client->setAuthConfig($this->app->config->get('youtubeAPIConfig.service_account_path'));
 		$client->setScopes($this->app->config->get('youtubeAPIConfig.scopes'));
+		$client->setPrompt('consent');
 		$client->setAccessType('offline');
-		$client->setApprovalPrompt('force');
 		$client->setRedirectUri(url(
 			$this->app->config->get('youtubeAPIConfig.routes.prefix')
 			. '/' .
@@ -484,7 +494,7 @@ class YoutubeAPI {
 			// If we have a "refresh_token"
 			if (array_key_exists('refresh_token', $accessToken)) {
 				// Refresh the access token
-				$this->client->refreshToken($accessToken['refresh_token']);
+				$this->client->fetchAccessTokenWithAssertion();
 				// Save the access token
 				$this->saveAccessTokenToDB($this->client->getAccessToken());
 			}

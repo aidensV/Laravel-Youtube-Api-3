@@ -6,14 +6,9 @@
  * Time: 10:12 PM
  */
 return [
-	/**
-	 * Client ID.
-	 */
-	'client_id' => env('GOOGLE_CLIENT_ID', null),
-	/**
-	 * Client Secret.
-	 */
-	'client_secret' => env('GOOGLE_CLIENT_SECRET', null),
+	'auth_config_path' => env('GOOGLE_CLIENT_CONFIG_PATH', null),
+	'service_account_path' => env('GOOGLE_CLIENT_SERVICE_ACCOUNT_PATH', null),
+	'drive_folder_id' => env('DRIVE_FOLDER_ID', null),
 	/**
 	 * Scopes.
 	 */
